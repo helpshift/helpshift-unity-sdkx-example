@@ -1,0 +1,23 @@
+﻿<Properties StartupConfiguration="{E7F98971-F891-4295-AC1D-5613564D2CB3}|Default">
+  <MonoDevelop.Ide.DebuggingService.Breakpoints>
+    <BreakpointStore />
+  </MonoDevelop.Ide.DebuggingService.Breakpoints>
+  <MultiItemStartupConfigurations />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.Workbench ActiveDocument="../Example/HelpshiftExampleScript.cs">
+    <Files>
+      <File FileName="../Example/HelpshiftExampleScript.cs" Line="23" Column="49" />
+    </Files>
+    <Pads>
+      <Pad Id="ProjectPad">
+        <State name="__root__">
+          <Node name="HsUnityEditor.VSP" expanded="True">
+            <Node name="HsUnityEditor.VSP" expanded="True" />
+          </Node>
+        </State>
+      </Pad>
+    </Pads>
+  </MonoDevelop.Ide.Workbench>
+  <MonoDevelop.Ide.ItemProperties.HsUnityEditor.VSP PreferredExecutionTarget="MonoDevelop.Default" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Default" />
+</Properties>
