@@ -65,7 +65,11 @@ namespace HelpshiftExample
                 // Recevied notification from customer's push integration.
                 // Extract proactive outbound link for Helpshift Outbound Support
                 string outboundLink = pushData["helpshift_proactive_link"];
-                Helpshift.HelpshiftSdk.GetInstance().HandleProactiveLink(outboundLink);
+                
+                // Embed this outboundLink in a notification Intent and post notification on device.
+                // When user clicks the notification then extract this outboundLink from the notification intent extra data and call
+                // Helpshift.HelpshiftSdk.GetInstance().HandleProactiveLink(outboundLink);
+
                 return;
             }
         }
