@@ -100,7 +100,6 @@ For this example app, we handle the click of this notification in Java layer its
    * Android: [Outbound Support](https://developers.helpshift.com/sdkx-unity/outbound-support-android/)
    * iOS: [Outbound Support](https://developers.helpshift.com/sdkx-unity/outbound-support-ios/)
 
-NOTE: In case the app is killed in background, the system will first invoke MainApplication.onCreate() and only then delegate control to ProactiveNotificationActivity or ProactiveDeepLinkActivity. Now since MainApplication.onCreate() is called first, we ensure that Helpshift.install() is called before calling Helpshift.handleProactiveLink() api.
 
 ### Event Delegates
  
