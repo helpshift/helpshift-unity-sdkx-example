@@ -90,14 +90,15 @@ NOTE: `HelpshiftSdk.GetInstance().Install()` must be called before invoking any 
 For this example app, we handle the click of this notification in Java layer itself via [ProactiveOutboundNotificationClickActivity](/HelpshifUnitySDKXExample_NativeAndroid/HelpshiftExampleNativeHandler/src/main/java/com/helpshift/unity/sdkx/helpshiftexamplenativehandler/ProactiveOutboundNotificationClickActivity.java)
 
 * Handling Proactive Outbound links as deep links
-      * Proactive Outbound links can be embedded in any channel like push notifications, email, sms, web etc
-      * To handle these deeplinks we need to create an Activity that will open when such links are clicked.
-      * Check Activity code here: [ProactiveOutboundDeeplinkHandlerActivity](/HelpshifUnitySDKXExample_NativeAndroid/HelpshiftExampleNativeHandler/src/main/java/com/helpshift/unity/sdkx/helpshiftexamplenativehandler/ProactiveOutboundDeeplinkHandlerActivity.java)
-      * Check the AndroidManifest to declare the deeplink pattern and protocol here: [AndroidManifest Deeplink](/HelpshifUnitySDKXExample_NativeAndroid/HelpshiftExampleNativeHandler/src/main/AndroidManifest.xml)
+   * Proactive Outbound links can be embedded in any channel like push notifications, email, sms, web etc
+   * To handle these deeplinks we need to create an Activity that will open when such links are clicked.
+   * Check Activity code here: [ProactiveOutboundDeeplinkHandlerActivity](/HelpshifUnitySDKXExample_NativeAndroid/HelpshiftExampleNativeHandler/src/main/java/com/helpshift/unity/sdkx/helpshiftexamplenativehandler/ProactiveOutboundDeeplinkHandlerActivity.java)
+      
+   * Check the AndroidManifest to declare the deeplink pattern and protocol here: [AndroidManifest Deeplink](/HelpshifUnitySDKXExample_NativeAndroid/HelpshiftExampleNativeHandler/src/main/AndroidManifest.xml)
 
 * Developer documentation:
-      * Android: [Outbound Support](https://developers.helpshift.com/sdkx-unity/outbound-support-android/)
-      * iOS: [Outbound Support](https://developers.helpshift.com/sdkx-unity/outbound-support-ios/)
+   * Android: [Outbound Support](https://developers.helpshift.com/sdkx-unity/outbound-support-android/)
+   * iOS: [Outbound Support](https://developers.helpshift.com/sdkx-unity/outbound-support-ios/)
 
 NOTE: In case the app is killed in background, the system will first invoke MainApplication.onCreate() and only then delegate control to ProactiveNotificationActivity or ProactiveDeepLinkActivity. Now since MainApplication.onCreate() is called first, we ensure that Helpshift.install() is called before calling Helpshift.handleProactiveLink() api.
 
