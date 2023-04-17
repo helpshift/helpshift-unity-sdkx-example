@@ -65,11 +65,19 @@ namespace HelpshiftExample
                 // Recevied notification from customer's push integration.
                 // Extract proactive outbound link for Helpshift Outbound Support
                 string outboundLink = pushData["helpshift_proactive_link"];
-                
+
                 // Embed this outboundLink in a notification Intent and post notification on device.
                 // When user clicks the notification then extract this outboundLink from the notification intent extra data and call
                 // Helpshift.HelpshiftSdk.GetInstance().HandleProactiveLink(outboundLink);
+                
+                // Below example demonstrates the above logic.
+                AndroidJavaClass notificationUtil = new AndroidJavaClass("com.helpshift.unity.sdkx.helpshiftexamplenativehandler.HelpshiftNotificationUtil");
+                
+                AndroidJavaClass unityPlayerClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+                AndroidJavaObject currentActivity = unityPlayerClass.GetStatic<AndroidJavaObject>("currentActivity");
 
+                notificationUtil.CallStatic("showNotification", new object[] { currentActivity, "Helpshift Example: Outbound Support Notification",  outboundLink});
+               
                 return;
             }
         }
