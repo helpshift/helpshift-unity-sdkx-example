@@ -1,0 +1,97 @@
+{
+  "project_info": {
+    "project_number": "823598250651",
+    "firebase_url": "https://psa-com-api-project-823598250651.firebaseio.com",
+    "project_id": "psa.com:api-project-823598250651"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:823598250651:android:ff2626bd2e23dqf893843d",
+        "android_client_info": {
+          "package_name": "com.example.qotdapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "823598250651-o8491kmmpipqcajg30fm6u08dlhtfjhm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "qdqdqwfgregAwefwefweewgh64hegwefr32rddewfwefwe-4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "823598250651-72if7srcttsgjdkh27cn342fachthachgslo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:823598250651:android:dqwdqdwfregerbxz67i7jynbdf",
+        "android_client_info": {
+          "package_name": "com.example.qotdappunity"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "823598250651-o8wefwefwef342r5243fewfewf23rwfejhm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqziOi6xlro8mbpTeTqAOGGkIJKyt21-4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "823598250651-72if7srcttsgfwefr32r3ffq24364ui76jnbvcasjdkh27cn2iahs1ghgslo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    },
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:971455446154:android:a58ea7d9d4a90665284173",
+        "android_client_info": {
+          "package_name": "com.helpshift.liteyagami"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "971455446154-o8491kmmpipqcajg30fm6u08dlhtfjhm.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCqziOi6xlro8mbpTeTqAOGGkIJKyt21-4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "971455446154-72if7srcttsgjdkh27cn2iahs1ghgslo.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

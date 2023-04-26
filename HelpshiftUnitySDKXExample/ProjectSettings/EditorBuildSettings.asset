@@ -7,5 +7,5 @@ EditorBuildSettings:
   m_Scenes:
   - enabled: 1
     path: Assets/Helpshift/Example/HelpshiftExample.unity
-    guid: 273ee81375edb491c93ef6925d4e9441
+    guid: 1116632d194b84fae949dfe11775ad61
   m_configObjects: {}
