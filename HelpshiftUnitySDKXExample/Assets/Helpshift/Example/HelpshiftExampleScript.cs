@@ -21,11 +21,11 @@ namespace HelpshiftExample
             Debug.Log("Unity - Awake called");
 
             _helpshiftX = HelpshiftSdk.GetInstance();
-            string domainName = "<your-domain>.helpshift.com";
+            string domainName = "gayatri.helpshift.com";
 
             string appId;
 #if UNITY_ANDROID
-            appId = "<your-app-android-app-id>";
+            appId = "gayatri_platform_20181018063833353-6d863ba814cb367";
 #elif UNITY_IOS
             appId = "<your-app-ios-app-id>";
 #endif
