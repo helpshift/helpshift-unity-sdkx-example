@@ -1,4 +1,4 @@
-using HSMiniJSON;
+﻿using HSMiniJSON;
 using UnityEngine;
 using System;
 using System.Collections.Generic;
@@ -8,7 +8,7 @@ namespace Helpshift
     public class HelpshiftSdk
     {
 
-        private const string PLUGIN_VERSION= "10.1.0";
+        private const string PLUGIN_VERSION= "10.3.0";
         /// <summary>
         /// Various enums which are used in the Helpshift APIs
         /// </summary>
@@ -94,10 +94,10 @@ namespace Helpshift
         /// If any Support session is active, then any login attempt is ignored.
         /// </summary>
         /// <param helpshiftUser="user">HelpshiftUser model for the user to be logged in</param>
-        public void Login(Dictionary<string, string> userData)
+        public Boolean Login(Dictionary<string, string> userData)
         {
 #if UNITY_IOS || UNITY_ANDROID
-            nativeSdk.Login(userData);
+           return nativeSdk.Login(userData);
 #endif
         }
 
@@ -306,6 +306,23 @@ namespace Helpshift
         {
 #if UNITY_IOS || UNITY_ANDROID
             nativeSdk.SetHelpshiftEventsListener(eventsListener);
+#endif
+        }
+
+        public string SdkVersion()
+        {
+#if UNITY_IOS || UNITY_ANDROID
+           return PLUGIN_VERSION;
+#endif
+        }
+
+        /// <summary>
+        /// Close Helpshift Conversation/FAQs screens
+        /// </summary>
+        public void CloseSession()
+        {
+#if UNITY_IOS || UNITY_ANDROID
+           nativeSdk.CloseSession();
 #endif
         }
 

@@ -14,6 +14,7 @@ namespace HelpshiftExample
 
         private HelpshiftSdk _helpshiftX;
         Dictionary<string, object> cifDictionary = new Dictionary<string, object>();
+        Dictionary<string, object> genericConfigDictionary = new Dictionary<string, object>();
 
         void Awake()
         {
@@ -30,7 +31,6 @@ namespace HelpshiftExample
 #endif
 
             _helpshiftX.Install(appId, domainName, GetInstallConfig());
-            
             _helpshiftX.SetHelpshiftEventsListener(new HSEventsListener());
             _helpshiftX.SetHelpshiftProactiveConfigCollector(new ProactiveConfigCollector());
 #if UNITY_ANDROID
@@ -143,8 +143,8 @@ namespace HelpshiftExample
 #if UNITY_ANDROID || UNITY_IOS
             try
             {
-                _helpshiftX.Login(GetUserDetails());
-                Debug.Log("Helpshift - Login called");
+                Boolean isLoggedIn = _helpshiftX.Login(GetUserDetails());
+                Debug.Log("Helpshift - Login called isLoggedIn :" + isLoggedIn);
             } catch (Exception e)
             {
 
@@ -160,6 +160,27 @@ namespace HelpshiftExample
             _helpshiftX.Logout();
             Debug.Log("Helpshift - Logout called");
 #endif
+        }
+
+        public void GetPluginVersion()
+        {
+#if UNITY_ANDROID || UNITY_IOS
+            string version = _helpshiftX.SdkVersion();
+            Debug.Log("Helpshift - SDK Version is :" + version);
+#endif
+        }
+
+        public void CloseHelpshift()
+        {
+#if UNITY_ANDROID || UNITY_IOS
+            Invoke("CloseSession", 8);
+#endif
+        }
+
+        void CloseSession()
+        {
+            _helpshiftX.CloseSession();
+            Debug.Log("Helpshift - Closesession");
         }
 
         public void AddCIF()
@@ -182,9 +203,52 @@ namespace HelpshiftExample
             {
                 Debug.Log("Error adding CIF, invalid type or name");
             }
+
+            setDataInInputField("cif_name", "");
+            setDataInInputField("cif_value", "");
 #endif
         }
 
+        public void AddGenericConfig() {
+#if UNITY_ANDROID || UNITY_IOS
+            Debug.Log("Helpshift - Add generic config called");
+
+            string key = getDataFromInputField("configKey");
+            string value = getDataFromInputField("configValue");
+
+            if (string.IsNullOrEmpty(key)) {
+                Debug.Log("Error adding config, invalid key!");
+                return;
+            }
+
+            Boolean valueBool = false;
+            long valueLong = 0L;
+
+            if (Boolean.TryParse(value, out valueBool)) {
+                genericConfigDictionary[key] = valueBool;
+            } else if (long.TryParse(value, out valueLong)) {
+                genericConfigDictionary[key] = valueLong;
+            } else {
+                genericConfigDictionary[key] = value;
+            }
+
+            setDataInInputField("configKey", "");
+            setDataInInputField("configValue", "");
+#endif
+        }
+
+        public void ClearConfig() {
+#if UNITY_ANDROID || UNITY_IOS
+            genericConfigDictionary.Clear();
+            cifDictionary.Clear();
+
+            setFlagInToggleField("full_privacy", false);
+            setDataInInputField("comma_separate", "");
+            setDataInInputField("configKey", "");
+            setDataInInputField("configValue", "");
+
+#endif
+        }
 
 
         private Dictionary<string, string> GetUserDetails()
@@ -219,10 +283,20 @@ namespace HelpshiftExample
 
             Dictionary<string, object> config = new Dictionary<string, object>();
 
-            config["customIssueFields"] = cifDictionary;
-            config["tags"] = tagsArray;
+            if (cifDictionary.Count > 0) {
+                config["cifs"] = cifDictionary;
+            }
+
+            if (tagsArray.Length > 0) {
+                config["tags"] = tagsArray;
+            }
+
             config["fullPrivacy"] = fullPrivacy;
             config["enableContactUs"] = contactUsValue;
+
+            foreach (var pair in genericConfigDictionary) {
+                config[pair.Key] = pair.Value;
+            }
 
             return config;
         }
@@ -230,20 +304,20 @@ namespace HelpshiftExample
 
         public static Dictionary<string, object> GetCifs()
         {
-            Dictionary<string, string> joiningDate = new Dictionary<string, string>();
+            Dictionary<string, object> joiningDate = new Dictionary<string, object>();
             joiningDate.Add("type", "date");
-            joiningDate.Add("value", "1505927361535");
+            joiningDate.Add("value", 1505927361535L);
 
             Dictionary<string, string> stockLevel = new Dictionary<string, string>();
-            stockLevel.Add("type", "n");
+            stockLevel.Add("type", "number");
             stockLevel.Add("value", "1505");
 
             Dictionary<string, string> employeeName = new Dictionary<string, string>();
-            employeeName.Add("type", "sl");
+            employeeName.Add("type", "singleline");
             employeeName.Add("value", "Bugs helpshift");
 
             Dictionary<string, string> isPro = new Dictionary<string, string>();
-            isPro.Add("type", "b");
+            isPro.Add("type", "checkbox");
             isPro.Add("value", "true");
 
             Dictionary<string, object> cifDictionary = new Dictionary<string, object>();
@@ -276,10 +350,22 @@ namespace HelpshiftExample
             return String.IsNullOrEmpty(field.text) ? "" : field.text;
         }
 
+        private void setDataInInputField(string fieldName, string value)
+        {
+            InputField field = GameObject.Find(fieldName).GetComponent<InputField>();
+            field.text = value;
+        }
+
         private bool getFlagFromToggleField(string fieldName)
         {
             Toggle field = GameObject.Find(fieldName).GetComponent<Toggle>();
             return field.isOn;
+        }
+
+        private void setFlagInToggleField(string fieldName, bool value)
+        {
+            Toggle field = GameObject.Find(fieldName).GetComponent<Toggle>();
+            field.isOn = value;
         }
 
         private string getDataFromDropDownField(string fieldName)
