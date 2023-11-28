@@ -39,11 +39,6 @@ namespace HelpshiftExample
         {
             Debug.Log("Received a new message from: " + e.Message.From);
 
-            AndroidJavaClass jc = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
-            AndroidJavaObject currentActivity = jc.GetStatic<AndroidJavaObject>("currentActivity");
-            AndroidJavaClass notificationUtil = new AndroidJavaClass("com.helpshift.unity.sdkx.helpshiftexamplenativehandler.HelpshiftNotificationUtil");
-            AndroidJavaObject application = currentActivity.Call<AndroidJavaObject>("getApplication");
-
             IDictionary<string, string> pushData = e.Message.Data;
 
             /// Check if the notification origin is Helpshift
@@ -76,12 +71,13 @@ namespace HelpshiftExample
                 // Helpshift.HelpshiftSdk.GetInstance().HandleProactiveLink(outboundLink);
                 
                 // Below example demonstrates the above logic.
-                notificationUtil.CallStatic("showProactiveOutboundNotification", new object[] { application, "Helpshift Example: Outbound Support Notification",  outboundLink });
-                return;
-            }
-            if (pushData.ContainsKey("close_helpshift_session"))
-            {
-                notificationUtil.CallStatic("showCloseHelpshiftSessionNotification", new object[] { application, "Helpshift Example: Close Helpshift Session Notification"});  
+                AndroidJavaClass notificationUtil = new AndroidJavaClass("com.helpshift.unity.sdkx.helpshiftexamplenativehandler.HelpshiftNotificationUtil");
+                
+                AndroidJavaClass unityPlayerClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
+                AndroidJavaObject currentActivity = unityPlayerClass.GetStatic<AndroidJavaObject>("currentActivity");
+
+                notificationUtil.CallStatic("showNotification", new object[] { currentActivity, "Helpshift Example: Outbound Support Notification",  outboundLink});
+               
                 return;
             }
         }

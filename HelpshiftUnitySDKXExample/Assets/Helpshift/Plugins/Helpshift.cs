@@ -98,6 +98,8 @@ namespace Helpshift
         {
 #if UNITY_IOS || UNITY_ANDROID
            return nativeSdk.Login(userData);
+#else
+           return false;
 #endif
         }
 
@@ -313,6 +315,8 @@ namespace Helpshift
         {
 #if UNITY_IOS || UNITY_ANDROID
            return PLUGIN_VERSION;
+#else
+           return "";
 #endif
         }
 

@@ -58,8 +58,7 @@ static HsUnityAppController *shared = [[HsUnityAppController alloc] init];
             hsInstallFromCache();
             dispatch_after(dispatch_time(DISPATCH_TIME_NOW, (int64_t)(2 * NSEC_PER_SEC)), dispatch_get_main_queue(), ^{
                 [Helpshift handleNotificationWithUserInfoDictionary:payload
-                                                        isAppLaunch:YES
-                                                     withController:UIApplication.sharedApplication.keyWindow.rootViewController];
+                                                        isAppLaunch:YES];
             });
         }
     }
@@ -74,8 +73,7 @@ static HsUnityAppController *shared = [[HsUnityAppController alloc] init];
 - (void) didReceiveRemoteNotification:(NSNotification *)notification {
     hsInstallFromCache();
     [Helpshift handleNotificationWithUserInfoDictionary:notification.userInfo
-                                            isAppLaunch:false
-                                         withController:UIApplication.sharedApplication.keyWindow.rootViewController];
+                                            isAppLaunch:false];
 }
 
 /* UNUserNotification delegates implementation starts here.
@@ -87,8 +85,7 @@ static HsUnityAppController *shared = [[HsUnityAppController alloc] init];
     if([notification.request.content.userInfo[@"origin"] isEqualToString:@"helpshift"]) {
         hsInstallFromCache();
         [Helpshift handleNotificationWithUserInfoDictionary:notification.request.content.userInfo
-                                                isAppLaunch:false
-                                             withController:UIApplication.sharedApplication.keyWindow.rootViewController];
+                                                isAppLaunch:false];
     }
     completionHandler(UNNotificationPresentationOptionNone);
 }
@@ -100,8 +97,7 @@ static HsUnityAppController *shared = [[HsUnityAppController alloc] init];
     if([notification.request.content.userInfo[@"origin"] isEqualToString:@"helpshift"]) {
         hsInstallFromCache();
         [Helpshift handleNotificationWithUserInfoDictionary:notification.request.content.userInfo 
-                                                isAppLaunch:false
-                                             withController:UIApplication.sharedApplication.keyWindow.rootViewController];
+                                                isAppLaunch:false];
     }
     completionHandler();
 }
