@@ -7,6 +7,9 @@
         <activity android:name=".ProactiveOutboundNotificationClickActivity"
             android:launchMode="singleTop"
             android:exported="false" />
+        <activity android:name=".CloseSessionNotificationClickActivity"
+            android:launchMode="singleTop"
+            android:exported="false"/>
 
         <activity android:name=".ProactiveOutboundDeeplinkHandlerActivity"
             android:exported="true"

@@ -44,5 +44,22 @@ namespace Helpshift
         public const string RECEIVED_UNREAD_MESSAGE_COUNT = "receivedUnreadMessageCount";
         public const string DATA_MESSAGE_COUNT = "count";
         public const string DATA_MESSAGE_COUNT_FROM_CACHE = "fromCache";
+
+        public const string ACTION_CLICKED = "userClickOnAction";
+        public const string DATA_ACTION = "actionType";
+        public const string DATA_ACTION_TYPE = "actionData";
+        public const string DATA_ACTION_TYPE_CALL = "call";
+        public const string DATA_ACTION_TYPE_LINK = "link";
+
+        public const string AGENT_MESSAGE_RECEIVED = "agentMessageReceived";
+        public const string DATA_PUBLISH_ID = "publishId";
+        public const string DATA_CREATED_TIME = "createdTs";
+        public const string DATA_ATTACHMENTS = "attachments";
+        public const string DATA_URL = "url";
+        public const string DATA_CONTENT_TYPE = "contentType";
+        public const string DATA_FILE_NAME = "fileName";
+        public const string DATA_SIZE = "size";
+        public const string DATA_MESSAGE_TYPE_APP_REVIEW_REQUEST = "app_review_request";
+        public const string DATA_MESSAGE_TYPE_SCREENSHOT_REQUEST = "screenshot_request";
     }
 }

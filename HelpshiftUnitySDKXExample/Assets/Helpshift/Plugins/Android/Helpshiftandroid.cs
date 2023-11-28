@@ -40,7 +40,7 @@ namespace Helpshift
             hsUnityApiClass.CallStatic("registerPushToken", new object[] { deviceToken });
         }
 
-        public void Login(Dictionary<string, string> userData)
+        public Boolean Login(Dictionary<string, string> userData)
         {
 
             if (userData == null)
@@ -48,7 +48,7 @@ namespace Helpshift
                 userData = new Dictionary<string, string>();
             }
             HelpshiftInternalLogger.d("Login called : " + userData.ToString());
-            hsUnityApiClass.CallStatic("login", new object[] { Json.Serialize(userData) });
+            return hsUnityApiClass.CallStatic<Boolean>("login", new object[] { Json.Serialize(userData) });
         }
 
         public void ClearAnonymousUserOnLogin(Boolean shouldClear)
@@ -157,6 +157,12 @@ namespace Helpshift
         {
             HelpshiftInternalLogger.d("clearBreadCrumbs api called");
             hsUnityApiClass.CallStatic("clearBreadCrumbs");
+        }
+
+        public void CloseSession() 
+        {
+            HelpshiftInternalLogger.d("closeSession api called");
+            hsUnityApiClass.CallStatic("closeSession");
         }
     }
     public class HelpshiftAndroidLog

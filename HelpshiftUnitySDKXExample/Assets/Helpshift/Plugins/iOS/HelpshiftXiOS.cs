@@ -30,7 +30,7 @@ namespace Helpshift
         private static extern void HsSetLanguage(string languageCode);
 
         [DllImport("__Internal")]
-        private static extern void HsLogin(string jsonUserDetailsDict);
+        private static extern bool HsLogin(string jsonUserDetailsDict);
 
         [DllImport("__Internal")]
         private static extern void HsLogout();
@@ -72,6 +72,9 @@ namespace Helpshift
 
         [DllImport("__Internal")]
         private static extern void HsAddUserTrail(string userTrail);
+
+        [DllImport("__Internal")]
+        private static extern void HsCloseSession();
 
         public HelpshiftXiOS()
         {
@@ -122,7 +125,7 @@ namespace Helpshift
             HsSetLanguage(languageCode);
         }
 
-        public void Login(Dictionary<string, string> userDetails)
+        public Boolean Login(Dictionary<string, string> userDetails)
         {
             if(userDetails == null)
             {
@@ -130,7 +133,7 @@ namespace Helpshift
                 userDetails = new Dictionary<string, string>();
             }
             HelpshiftInternalLogger.d("Login called : " + userDetails);
-            HsLogin(Json.Serialize(userDetails));
+            return HsLogin(Json.Serialize(userDetails));;
         }
 
         public void Logout()
@@ -138,6 +141,7 @@ namespace Helpshift
             HelpshiftInternalLogger.d("logout api called");
             HsLogout();
         }
+
         [Obsolete("ClearAnonymousUserOnLogin is deprecated, please use ClearAnonymousUserOnLogin(Boolean clearAnonymousUser) instead.")]
         public void ClearAnonymousUserOnLogin()
         {
@@ -202,6 +206,11 @@ namespace Helpshift
             HsAddUserTrail(trail);
         }
 
+        public void CloseSession()
+        {
+            HsCloseSession();
+        }
+
         // Private Helpers
 
         private string SerializeDictionary(Dictionary<string, object> configMap)
@@ -222,9 +231,6 @@ namespace Helpshift
 
         [DllImport("__Internal")]
         private static extern void HsAddDebugLog(string log);
-
-        [DllImport("__Internal")]
-        private static extern void HsLog(string log);
 
         private HelpshiftiOSLog()
         {
@@ -262,7 +268,7 @@ namespace Helpshift
 
         public static int log(String log)
         {
-            HsLog(log);
+            HsAddDebugLog(log);
             return 0;
         }
 

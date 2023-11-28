@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using Helpshift;
 using UnityEngine;
+using HSMiniJSON;
 
 namespace HelpshiftExample
 {
@@ -19,7 +20,7 @@ namespace HelpshiftExample
             {
                 foreach (KeyValuePair<string, object> kvp in eventData)
                 {
-                    eventDataString += kvp.Key + ":" + kvp.Value.ToString();
+                    eventDataString += '\n' + string.Format("Key = {0}, Value = {1}", kvp.Key, Json.Serialize(kvp.Value));
                 }
             }
             Debug.Log("Helpshift - event_" + eventName + " " + eventDataString);
