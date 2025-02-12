@@ -23,7 +23,6 @@
 #
 # BUILT_PRODUCTS_DIR
 # FRAMEWORKS_FOLDER_PATH
-# VALID_ARCHS
 # EXPANDED_CODE_SIGN_IDENTITY
 
 
@@ -48,6 +47,9 @@ fi
 
 echo "Stripping frameworks"
 
+declare -a INVALID_ARCHS=("x86_64" "i386")
+echo "Invalid archs: ${INVALID_ARCHS[@]}"
+
 for file in $(find . -type f); do
   # Skip non-dynamic libraries
   if ! [[ "$(file "$file")" == *"dynamically linked shared library"* ]]; then
@@ -57,7 +59,7 @@ for file in $(find . -type f); do
   archs="$(lipo -info "${file}" | rev | cut -d ':' -f1 | rev)"
   stripped=""
   for arch in $archs; do
-    if ! [[ "${VALID_ARCHS}" == *"$arch"* ]]; then
+    if [[ "(${INVALID_ARCHS[@]})" == *"$arch"* ]]; then
       # Strip non-valid architectures in-place
       lipo -remove "$arch" -output "$file" "$file" || exit 1
       stripped="$stripped $arch"
