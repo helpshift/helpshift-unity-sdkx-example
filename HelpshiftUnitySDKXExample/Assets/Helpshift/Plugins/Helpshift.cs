@@ -8,7 +8,7 @@ namespace Helpshift
     public class HelpshiftSdk
     {
 
-        private const string PLUGIN_VERSION= "10.3.0";
+        private const string PLUGIN_VERSION= "10.4.0";
         /// <summary>
         /// Various enums which are used in the Helpshift APIs
         /// </summary>
@@ -279,6 +279,30 @@ namespace Helpshift
 #if UNITY_ANDROID || UNITY_IOS
             nativeSdk.SetSDKLanguage(locale);
 #endif
+        }
+
+        public void UpdateAppAttributes(Dictionary<string, object> attritbutes){
+        #if UNITY_IOS || UNITY_ANDROID 
+                nativeSdk.UpdateAppAttributes(attritbutes);
+        #endif      
+        }
+
+        public void UpdateMasterAttributes(Dictionary<string, object> attritbutes){
+        #if UNITY_IOS || UNITY_ANDROID 
+                nativeSdk.UpdateMasterAttributes(attritbutes);
+        #endif
+        }
+
+        public void AddUserIdentities(string identitiesJwt){
+        #if UNITY_IOS || UNITY_ANDROID 
+                nativeSdk.AddUserIdentities(identitiesJwt);
+        #endif
+        }
+
+        public void LoginWithIdentity(string identitiesJwt, Dictionary<string, object> loginConfig, IHelpshiftUserLoginEventListener helpshiftUserLoginEventListener){
+        #if UNITY_IOS || UNITY_ANDROID 
+                nativeSdk.LoginWithIdentities(identitiesJwt, loginConfig, helpshiftUserLoginEventListener);
+        #endif  
         }
 
 

@@ -23,7 +23,7 @@ namespace Helpshift
 #if UNITY_ANDROID
             hsInternalLogger.CallStatic("d", new object[] { TAG, message });
 #elif UNITY_IOS
-            HelpshiftiOSLog.log("DEBUG: " + TAG + ": " + message);
+            Debug.Log("DEBUG: " + TAG + ": " + message);
 #endif
         }
 
@@ -35,7 +35,7 @@ namespace Helpshift
 #if UNITY_ANDROID
             hsInternalLogger.CallStatic("e", new object[] { TAG, message });
 #elif UNITY_IOS
-            HelpshiftiOSLog.log("ERROR: " + TAG + ": " + message);
+            Debug.Log("ERROR: " + TAG + ": " + message);
 #endif
         }
 
@@ -47,7 +47,7 @@ namespace Helpshift
 #if UNITY_ANDROID
             hsInternalLogger.CallStatic("w", new object[] { TAG, message });
 #elif UNITY_IOS
-            HelpshiftiOSLog.log("WARN: " + TAG + ": " + message);
+            Debug.Log("WARN: " + TAG + ": " + message);
 #endif
         }
     }

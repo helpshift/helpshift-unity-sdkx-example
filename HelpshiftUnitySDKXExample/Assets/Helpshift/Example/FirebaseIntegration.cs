@@ -8,7 +8,10 @@ namespace HelpshiftExample
 {
 	public class FirebaseIntegration
 	{
-		public static void initFirebase()
+        public static Action updatePushToken = null;
+
+
+        public static void initFirebase(Action updatePushTokenDelegate)
 		{
             Firebase.FirebaseApp.CheckAndFixDependenciesAsync().ContinueWith(task => {
                 var dependencyStatus = task.Result;
@@ -19,6 +22,7 @@ namespace HelpshiftExample
                     // Set a flag here to indicate whether Firebase is ready to use by your app.
                     Firebase.Messaging.FirebaseMessaging.TokenReceived += OnTokenReceived;
                     Firebase.Messaging.FirebaseMessaging.MessageReceived += OnMessageReceived;
+                    updatePushToken = updatePushTokenDelegate;
                 }
                 else
                 {
@@ -33,6 +37,8 @@ namespace HelpshiftExample
         {
             Debug.Log("Received Registration Token: " + token.Token);
             Helpshift.HelpshiftSdk.GetInstance().RegisterPushToken(token.Token);
+            PlayerPrefs.SetString("androidPushToken", token.Token);
+            updatePushToken();
         }
 
         public static void OnMessageReceived(object sender, Firebase.Messaging.MessageReceivedEventArgs e)
@@ -76,7 +82,7 @@ namespace HelpshiftExample
                 AndroidJavaClass unityPlayerClass = new AndroidJavaClass("com.unity3d.player.UnityPlayer");
                 AndroidJavaObject currentActivity = unityPlayerClass.GetStatic<AndroidJavaObject>("currentActivity");
 
-                notificationUtil.CallStatic("showNotification", new object[] { currentActivity, "Helpshift Example: Outbound Support Notification",  outboundLink});
+                notificationUtil.CallStatic("showProactiveOutboundNotification", new object[] { currentActivity, "Helpshift Example: Outbound Support Notification",  outboundLink});
                
                 return;
             }

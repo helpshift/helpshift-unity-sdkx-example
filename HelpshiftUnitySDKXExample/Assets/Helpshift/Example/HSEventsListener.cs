@@ -10,20 +10,26 @@ namespace HelpshiftExample
 
         public void AuthenticationFailedForUser(HelpshiftAuthenticationFailureReason reason)
         {
-            Debug.Log("Helpshift - Authentication Failed for reason " + reason.ToString());
+            string message = "Helpshift - Authentication Failed for reason: " + reason.ToString();
+            Debug.Log(message);
+            HelpshiftEventLoggerScript.AddEventMessage(message);
         }
 
         public void HandleHelpshiftEvent(string eventName, Dictionary<string, object> eventData)
         {
             string eventDataString = "";
+            string message =  $"Helpshift - Event: {eventName}";
             if (eventData != null)
             {
                 foreach (KeyValuePair<string, object> kvp in eventData)
                 {
-                    eventDataString += '\n' + string.Format("Key = {0}, Value = {1}", kvp.Key, Json.Serialize(kvp.Value));
+                    eventDataString += string.Format("Key = {0}, Value = {1}", kvp.Key, Json.Serialize(kvp.Value));
                 }
+                message += $"\n{eventDataString}";
             }
-            Debug.Log("Helpshift - event_" + eventName + " " + eventDataString);
+
+            Debug.Log(message);
+            HelpshiftEventLoggerScript.AddEventMessage(message);
         }
     }
 }

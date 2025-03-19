@@ -1,4 +1,4 @@
-﻿
+
 /*
  * Copyright 2020, Helpshift, Inc.
  * All rights reserved
@@ -75,6 +75,15 @@ namespace Helpshift
 
         [DllImport("__Internal")]
         private static extern void HsCloseSession();
+
+        [DllImport("__Internal")]
+        private static extern void HsAddUserIdentities(string identitiesJWT);
+
+        [DllImport("__Internal")]
+        private static extern void HsUpdateMasterAttributes(string attributesJson);
+
+        [DllImport("__Internal")]
+        private static extern void HsUpdateAppAttributes(string attributesJson);
 
         public HelpshiftXiOS()
         {
@@ -172,6 +181,7 @@ namespace Helpshift
             HelpshiftInternalLogger.d("Event listener is set");
             HelpshiftXiOSDelegate.SetExternalDelegate(listener);
         }
+
         public void SetHelpshiftProactiveConfigCollector(IHelpshiftProactiveAPIConfigCollector listener)
         {
             HelpshiftInternalLogger.d("Proactive Event listener is set");
@@ -209,6 +219,30 @@ namespace Helpshift
         public void CloseSession()
         {
             HsCloseSession();
+        }
+
+        public void LoginWithIdentities(string identitiesJwt, Dictionary<string, object> loginConfig, IHelpshiftUserLoginEventListener helpshiftUserLoginEventListener)
+        {
+            HelpshiftInternalLogger.d("loginWithIdentities api called with " + identitiesJwt + ", loginConfig " + loginConfig);
+            HelpshiftXiOSDelegate.LoginWithIdentities(identitiesJwt,SerializeDictionary(loginConfig),helpshiftUserLoginEventListener);
+        }
+
+        public void UpdateAppAttributes(Dictionary<string, object> appAttributes)
+        {
+            HelpshiftInternalLogger.d("updateAppAttributes api called " + appAttributes);
+            HsUpdateAppAttributes(SerializeDictionary(appAttributes));
+        }
+
+        public void UpdateMasterAttributes(Dictionary<string, object> masterAttributes)
+        {
+            HelpshiftInternalLogger.d("updateMasterAttributes api called " + masterAttributes);
+            HsUpdateMasterAttributes(SerializeDictionary(masterAttributes));
+        }
+
+        public void AddUserIdentities(string identitiesJwt)
+        {
+            HelpshiftInternalLogger.d("addUserIdentities api called " + identitiesJwt);
+            HsAddUserIdentities(identitiesJwt);
         }
 
         // Private Helpers

@@ -72,6 +72,30 @@ public class HelpshiftPostProcess : MonoBehaviour
             "bash \"${BUILT_PRODUCTS_DIR}/${FRAMEWORKS_FOLDER_PATH}/HelpshiftX.framework/strip_frameworks.sh\"");
         }
 
+        /* [REMOVE COMMENTED TO INCLUDE HELPSHIFTX DSYMS]
+        // Check if the Run Script phase is already added
+        if (!project.isShellScriptAdded(unityAppTargetGuid, "HS Copy dSYM File"))
+        {
+            // Define the script name and path for your custom dSYM copying
+            string scriptCommand = @"
+FRAMEWORK_NAME=""HelpshiftX""
+FRAMEWORK_DSYM_PATH=""<ABSOLUTE_PATH_TO_THE_DSYM>""
+APP_DSYM_PATH=""${DWARF_DSYM_FOLDER_PATH}""
+
+if [ -d ""${FRAMEWORK_DSYM_PATH}"" ]; then
+    cp -R ""${FRAMEWORK_DSYM_PATH}"" ""${APP_DSYM_PATH}""
+else
+    echo ""⚠️ No dSYM found at ${FRAMEWORK_DSYM_PATH}""
+fi
+";
+            // Add the Run Script phase to copy dSYM if not already added
+            project.AddShellScriptBuildPhase(unityAppTargetGuid,
+                "HS Copy dSYM File",
+                "/bin/sh",
+                scriptCommand);
+        }
+       [REMOVE] */
+
         // Add @executable_path/Frameworks to Runpath Search Paths for app target, if not already added
         if (!project.IsBuildPropertyAdded(unityAppTargetGuid, "LD_RUNPATH_SEARCH_PATHS", "@executable_path/Frameworks"))
         {

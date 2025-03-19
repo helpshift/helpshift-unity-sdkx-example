@@ -21,6 +21,15 @@ static HsUnityAppController *shared = [[HsUnityAppController alloc] init];
     self = [super init];
     if(self) {
         UnityRegisterAppDelegateListener(self);
+        // Uncomment to listen for remote push notification registration success. The push token will be received in
+        // didRegisterForRemoteNotificationsWithDeviceToken: method, which passes it to Helpshift.
+
+        
+        [NSNotificationCenter.defaultCenter addObserver:self
+                                               selector:@selector(didRegisterForRemoteNotificationsWithDeviceToken:)
+                                                   name:kUnityDidRegisterForRemoteNotificationsWithDeviceToken
+                                                 object:nil];
+         
     }
     return self;
 }
@@ -76,18 +85,23 @@ static HsUnityAppController *shared = [[HsUnityAppController alloc] init];
                                             isAppLaunch:false];
 }
 
-/* UNUserNotification delegates implementation starts here.
- * If your app already implements these delegates than copy this code snippet to your implementation and remove this implementation.
+/* UNUserNotification delegates implementation starts here. If your app already implements these delegates than copy
+ * this code snippet to your implementation and remove this implementation.
  */
 - (void) userNotificationCenter:(UNUserNotificationCenter *)center
         willPresentNotification:(UNNotification *)notification
           withCompletionHandler:(void (^)(UNNotificationPresentationOptions options))completionHandler {
     if([notification.request.content.userInfo[@"origin"] isEqualToString:@"helpshift"]) {
+        // Notification is for Helpshift. Pass it to handleNotificationWithUserInfoDictionary: Helpshift API, which
+        // which takes care of presenting the in-app UI badge for the notification.
         hsInstallFromCache();
         [Helpshift handleNotificationWithUserInfoDictionary:notification.request.content.userInfo
                                                 isAppLaunch:false];
+        completionHandler(UNNotificationPresentationOptionNone);
+    } else {
+        // Notification is not for Helpshift. App should handle this.
+        completionHandler(UNNotificationPresentationOptionAlert);
     }
-    completionHandler(UNNotificationPresentationOptionNone);
 }
 
 - (void) userNotificationCenter:(UNUserNotificationCenter *)center
@@ -95,9 +109,25 @@ static HsUnityAppController *shared = [[HsUnityAppController alloc] init];
           withCompletionHandler:(void (^)(void))completionHandler {
     UNNotification *notification = response.notification;
     if([notification.request.content.userInfo[@"origin"] isEqualToString:@"helpshift"]) {
+        // Notification is for Helpshift. Pass it to handleNotificationWithUserInfoDictionary: Helpshift API, which
+        // which takes care of handling the notification click.
         hsInstallFromCache();
-        [Helpshift handleNotificationWithUserInfoDictionary:notification.request.content.userInfo 
+        [Helpshift handleNotificationWithUserInfoDictionary:notification.request.content.userInfo
                                                 isAppLaunch:false];
+    } else {
+        // Uncomment the following code block to enable proactive outbound support push notification handling.
+
+        
+        // Read the proactive link from notification payload. This will depend on how the notification payload is sent
+        // by your backend.
+        NSString* proactiveLink = notification.request.content.userInfo[@"helpshift_proactive_link"];
+        if(proactiveLink != nil) {
+            // Notification is for Helpshift outbound support. Pass the outbound support link to Helpshift.
+            [Helpshift handleProactiveLink:proactiveLink];
+        } else {
+            // Notification is not for Helpshift. App should handle this.
+        }
+         
     }
     completionHandler();
 }

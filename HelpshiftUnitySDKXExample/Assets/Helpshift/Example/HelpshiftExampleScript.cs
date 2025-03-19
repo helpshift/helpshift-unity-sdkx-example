@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System;
 using System.Collections.Generic;
+using UnityEngine.SceneManagement;
 #if UNITY_IOS || UNITY_ANDROID
 using Helpshift;
 #endif
@@ -13,6 +14,7 @@ namespace HelpshiftExample
 #if UNITY_IOS || UNITY_ANDROID
 
         private HelpshiftSdk _helpshiftX;
+        private HelpshiftXExampleDebug _helpshiftDebug;
         Dictionary<string, object> cifDictionary = new Dictionary<string, object>();
         Dictionary<string, object> genericConfigDictionary = new Dictionary<string, object>();
 
@@ -21,21 +23,32 @@ namespace HelpshiftExample
             Debug.Log("Unity - Awake called");
 
             _helpshiftX = HelpshiftSdk.GetInstance();
-            string domainName = "<your-domain>.helpshift.com";
+            _helpshiftDebug = HelpshiftXExampleDebug.GetInstance();
+            string domainName = PlayerPrefs.GetString("domain", "<your-domain>.helpshift.com");
 
             string appId;
 #if UNITY_ANDROID
             appId = "<your-app-android-app-id>";
 #elif UNITY_IOS
-            appId = "<your-app-ios-app-id>";
+            appId =  PlayerPrefs.GetString("platformId", "<your-app-ios-app-id>");;
 #endif
 
             _helpshiftX.Install(appId, domainName, GetInstallConfig());
             _helpshiftX.SetHelpshiftEventsListener(new HSEventsListener());
             _helpshiftX.SetHelpshiftProactiveConfigCollector(new ProactiveConfigCollector());
 #if UNITY_ANDROID
-            FirebaseIntegration.initFirebase();
+
+            // Uncomment for FCM notifications init
+            FirebaseIntegration.initFirebase(updatePushTokenOnUI);
+
+            // Uncomment following to enable webview debugging
+            //new AndroidJavaClass("android.webkit.WebView").CallStatic("setWebContentsDebuggingEnabled", new object[] { true });
 #endif
+        }
+
+        public void updatePushTokenOnUI()
+        {
+            setDataInInputField("pushTokenValueHolder", PlayerPrefs.GetString("androidPushToken"));
         }
 
         public void ShowConversation()
@@ -183,6 +196,23 @@ namespace HelpshiftExample
             Debug.Log("Helpshift - Closesession");
         }
 
+        public void openMiscFeatureScene()
+        {
+#if UNITY_ANDROID || UNITY_IOS
+            Debug.Log("Helpshift: Load misc features scene clicked");
+            SceneManager.LoadScene("InternalFeatures", LoadSceneMode.Single);
+#endif
+        }
+
+        public void Purge()
+        {
+        #if UNITY_IOS
+            _helpshiftDebug.Purge();
+            Debug.Log("Helpshift - Purge");
+        #endif
+        }
+
+
         public void AddCIF()
         {
 #if UNITY_ANDROID || UNITY_IOS
@@ -250,6 +280,13 @@ namespace HelpshiftExample
 #endif
         }
 
+        public void LoadIdentityScene() {
+            SceneManager.LoadScene("HelpshiftIdentityLogin",LoadSceneMode.Additive);
+        }
+
+        public void openEventLogger() {
+            SceneManager.LoadScene("HelpshiftEventLogger",LoadSceneMode.Additive);
+        }
 
         private Dictionary<string, string> GetUserDetails()
         {
