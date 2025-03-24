@@ -11,8 +11,11 @@ Sample Unity project demonstrating the integration of Helpshift Unity SDK X
 
 ## Import project
 
-1. Clone the repositiory
+1. Clone the repositiory.
 2. Open `HelpshiftUnitySDKXExample` project in Unity IDE 2018.3 and above.
+3. Download Firebase unity SDK (11.7.0) zip file from [here]https://dl.google.com/firebase/sdk/unity/firebase_unity_sdk_11.6.0.zip).(11.6.0 is the minimum version needed to run succesfully )
+   * Import `FirebaseMessaging.unitypackage` only.
+   * This package comes with unity jar resolver, use this to resolve all Android related dependencies.
 
 ## Building the project
 
