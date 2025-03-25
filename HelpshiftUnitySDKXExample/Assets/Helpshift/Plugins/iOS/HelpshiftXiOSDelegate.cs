@@ -1,4 +1,4 @@
-﻿/*
+/*
  * Copyright 2020, Helpshift, Inc.
  * All rights reserved
  */
@@ -7,6 +7,7 @@
 using System.Runtime.InteropServices;
 using System.Collections.Generic;
 using HSMiniJSON;
+using System;
 
 namespace Helpshift
 {
@@ -17,6 +18,9 @@ namespace Helpshift
     {
         public const string HandleHelpshiftEvent = "handleHelpshiftEvent";
         public const string AuthenticationFailed = "authenticationFailedForUserWithReason";
+        public const string LoginWithIdentitySuccess = "loginWithIdentitySuccess";
+        public const string LoginWithIdentityFailed = "loginWithIdentityFailed";
+
     }
 
     public class HelpshiftXiOSDelegate
@@ -35,7 +39,6 @@ namespace Helpshift
         /// return type dictionary convertable string
         private delegate string unityGetApiConfig();
 
-
         /// <summary>
         /// Runtimed linked C method to register callback with the declared signature
         /// </summary>
@@ -50,6 +53,9 @@ namespace Helpshift
         [DllImport("__Internal")]
         private static extern void HsRegisterHelpshiftProactiveDelegateCallback(unityGetApiConfig callback);
 
+        // Import the Helpshift loginWithIdentity function
+        [DllImport("__Internal")]
+        private static extern void HsLoginWithIdentity(string identityJWT,string loginConfigJson,UnitySupportMessageCallback callback);
 
         /// <summary>
         /// The shared instance of this class.
@@ -65,6 +71,11 @@ namespace Helpshift
         /// The external delegate object for pro active config that has been passed by the developer
         /// </summary>
         internal IHelpshiftProactiveAPIConfigCollector externalProactiveDelegate;
+
+        /// <summary>
+        /// The external delegate object for loginWithIdentitiesDelegate
+        /// </summary>
+        internal IHelpshiftUserLoginEventListener externalLoginWithIdentityDelegate;
 
         private HelpshiftXiOSDelegate() { }
 
@@ -92,11 +103,21 @@ namespace Helpshift
         /// <summary>
         /// Call this method to set the external delegate to listen to Helpshift Events for proactive
         /// </summary>
-        /// <param name="helpshiftEventListener"></param>
+        /// <param name="proactiveDelegate"></param>
         public static void SetExternalProactiveDelegate(IHelpshiftProactiveAPIConfigCollector proactiveDelegate)
         {
             GetInstance().externalProactiveDelegate = proactiveDelegate;
             RegisterHelpshifProactiveDelegateCallback();
+        }
+
+        /// <summary>
+        /// Call this method to login with identity
+        /// </summary>
+        /// <param name="loginWithIdentities"></param>
+        public static void LoginWithIdentities(string identitiesJwt,string loginConfig, IHelpshiftUserLoginEventListener helpshiftUserLoginEventListener)
+        {
+            GetInstance().externalLoginWithIdentityDelegate = helpshiftUserLoginEventListener;
+            HsLoginWithIdentity(identitiesJwt,loginConfig,UnityLoginWithIdentityCallbackImpl);
         }
 
         // Private Helpers
@@ -175,6 +196,83 @@ namespace Helpshift
             IHelpshiftProactiveAPIConfigCollector externalDelegate = GetInstance().externalProactiveDelegate;
             Dictionary<string, object> config = externalDelegate.getLocalApiConfig();
             return SerializeDictionary(config);
+        }
+
+        [MonoPInvokeCallback(typeof(UnitySupportMessageCallback))]
+        static void UnityLoginWithIdentityCallbackImpl(string methodName, string parametersJson)
+        {
+            IHelpshiftUserLoginEventListener externalDelegate = GetInstance().externalLoginWithIdentityDelegate;
+
+            if (externalDelegate == null)
+            {
+                HelpshiftInternalLogger.e("externalDelegate is null, skipping callback invocation.");
+                return;
+            }
+
+            try
+            {
+
+                if (methodName == HelpshiftEventConstants.LoginWithIdentitySuccess)
+                {
+                    externalDelegate.OnLoginSuccess();
+
+                } else if (methodName == HelpshiftEventConstants.LoginWithIdentityFailed) {
+
+                    Dictionary<string, object> parametersDictionary = (Dictionary<string, object>)Json.Deserialize(parametersJson);
+
+                    if (parametersDictionary == null)
+                    {
+                        HelpshiftInternalLogger.d("Failed to parse parametersDictionary: " + parametersJson);
+                    }
+
+                    string reason = "";
+                    if (parametersDictionary.ContainsKey("reason"))
+                    {
+                        reason = parametersDictionary["reason"] as string ?? "unknownError";
+                    }
+
+                    // Extract and parse "errors" field
+                    Dictionary<string, string> eventDataDictionary = new Dictionary<string, string>();
+                    if (parametersDictionary.ContainsKey("errors"))
+                    {
+                        Dictionary<string, object> errorsObject = parametersDictionary["errors"] as Dictionary<string, object>;
+                        if (errorsObject != null)
+                        {
+                            // Convert to Dictionary<string, string>, ignoring invalid value types
+                            foreach (var keyValue in errorsObject)
+                            {
+                                if (keyValue.Value is string stringValue)
+                                {
+                                    eventDataDictionary[keyValue.Key] = stringValue;
+                                }
+                                else
+                                {
+                                    HelpshiftInternalLogger.d($"Ignoring key '{keyValue.Key}' with non-string value.");
+                                }
+                            }
+                        }
+                        else
+                        {
+                            HelpshiftInternalLogger.d("Errors field is not a dictionary: " + parametersDictionary["errors"]);
+                        }
+                    }
+                    // Check if externalDelegate exists and invoke callback
+                    if (externalDelegate != null)
+                    {
+                        externalDelegate.OnLoginFailure(reason, eventDataDictionary);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                HelpshiftInternalLogger.e($"Exception in UnityLoginWithIdentityCallbackImpl: {ex}");
+                externalDelegate.OnLoginFailure("unknownError", new Dictionary<string, string>());
+            }
+            finally
+            {
+                HelpshiftInternalLogger.d("Setting externalLoginWithIdentityDelegate to null");
+                GetInstance().externalLoginWithIdentityDelegate = null;
+            }
         }
 
         private static string SerializeDictionary(Dictionary<string, object> configMap)

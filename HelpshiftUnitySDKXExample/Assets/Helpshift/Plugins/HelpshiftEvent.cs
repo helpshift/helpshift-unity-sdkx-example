@@ -61,5 +61,45 @@ namespace Helpshift
         public const string DATA_SIZE = "size";
         public const string DATA_MESSAGE_TYPE_APP_REVIEW_REQUEST = "app_review_request";
         public const string DATA_MESSAGE_TYPE_SCREENSHOT_REQUEST = "screenshot_request";
+
+        // User identity events
+        public const string ATTRIBUTES_DATA_INVALID = "attributesDataInvalid";
+        public const string MASTER_ATTRIBUTES_VALIDATION_FAILED = "masterAttributesValidationFailed";
+        public const string MASTER_ATTRIBUTES_SYNC_FAILED = "masterAttributesSyncFailed";
+        public const string MASTER_ATTRIBUTES_LIMIT_EXCEEDED = "masterAttributesLimitExceeded";
+
+        public const string APP_ATTRIBUTES_VALIDATION_FAILED = "appAttributesValidationFailed";
+        public const string APP_ATTRIBUTES_SYNC_FAILED = "appAttributesSyncFailed";
+        public const string APP_ATTRIBUTES_LIMIT_EXCEEDED = "appAttributesLimitExceeded";
+
+        public const string IDENTITY_DATA_SYNC_FAILED = "identityDataSyncFailed";
+        public const string USER_SESSION_EXPIRED = "userSessionExpired";
+        public const string USER_IDENTITY_NOT_ENABLED = "userIdentityNotEnabled";
+        public const string REFRESH_USER_CREDENTIALS = "refreshUserCredentials";
+
+        // User identity login failure reasons
+        public const string LOGIN_IN_PROGRESS = "loginInProgress";
+        public const string LOGIN_CONFIG_INVALID = "loginConfigInvalid";
+        public const string IDENTITY_TOKEN_INVALID = "identityTokenInvalid";
+        public const string IDENTITY_DATA_INVALID = "identitiesDataInvalid";
+        public const string LOGIN_CONFIG_SIZE_LIMIT_EXCEEDED = "loginConfigSizeLimitExceeded";
+        public const string IDENTITIES_SIZE_LIMIT_EXCEEDED = "identitiesSizeLimitExceeded";
+        public const string IDENTITY_FEATURE_NOT_ENABLED = "identityFeatureNotEnabled";
+        public const string UID_OR_EMAIL_IS_MANDATORY = "uidOrEmailIsMandatory";
+        public const string IAT_IS_MANDATORY = "iatIsMandatory";
+        public const string NETWORK_ERROR = "networkError";
+        public const string UNKNOWN_ERROR = "unknownError";
+
+        // User identity login error values
+        public const string INVALID_VALUE_TYPE = "invalidValueType";
+        public const string INVALID_DATA = "invalidData";
+        public const string EXCEEDED_KEY_LENGTH_LIMIT = "exceededKeyLengthLimit";
+        public const string METADATA_EXCEEDED_KEY_LENGTH_LIMIT = "metadataExceededKeyLengthLimit";
+        public const string EXCEEDED_VALUE_LENGTH_LIMIT = "exceededValueLengthLimit";
+        public const string METADATA_EXCEEDED_VALUE_LENGTH_LIMIT = "metadataExceededValueLengthLimit";
+        public const string EMPTY_DATA = "emptyData";
+        public const string METADATA_EMPTY_KEY_OR_VALUE = "metadataEmptyKeyOrValue";
+        public const string EXCEEDED_COUNT_LIMIT = "exceededCountLimit";
+        public const string METADATA_EXCEEDED_COUNT_LIMIT = "metadataExceededCountLimit";
     }
 }

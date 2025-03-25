@@ -164,6 +164,37 @@ namespace Helpshift
             HelpshiftInternalLogger.d("closeSession api called");
             hsUnityApiClass.CallStatic("closeSession");
         }
+
+        public void LoginWithIdentities(string identitiesJwt, Dictionary<string, object> loginConfigMap, IHelpshiftUserLoginEventListener helpshiftUserLoginEventListener)
+        {
+            string loginConfigData = SerializeMap(loginConfigMap);
+
+            HelpshiftInternalLogger.d("loginWithIdentities api called with " + identitiesJwt + ", loginConfig " + loginConfigData);
+            HelpshiftLoginEventProxy helpshiftLoginEventProxy = new HelpshiftLoginEventProxy(helpshiftUserLoginEventListener);
+            hsUnityApiClass.CallStatic("loginWithIdentity",new object[] { identitiesJwt, loginConfigData, helpshiftLoginEventProxy });
+        }
+
+        public void UpdateAppAttributes(Dictionary<string, object> appAttributesConfigMap)
+        {
+            string appAttributesData = SerializeMap(appAttributesConfigMap);
+
+            HelpshiftInternalLogger.d("updateAppAttributes api called " + appAttributesData);
+            hsUnityApiClass.CallStatic("updateAppAttributes", appAttributesData);
+        }
+
+        public void UpdateMasterAttributes(Dictionary<string, object> masterAttributesConfigMap)
+        {
+            string masterAttributesData = SerializeMap(masterAttributesConfigMap);
+
+            HelpshiftInternalLogger.d("updateMasterAttributes api called " + masterAttributesData);
+            hsUnityApiClass.CallStatic("updateMasterAttributes", masterAttributesData);
+        }
+
+        public void AddUserIdentities(string identitiesJwt)
+        {
+            HelpshiftInternalLogger.d("addUserIdentities api called " + identitiesJwt);
+            hsUnityApiClass.CallStatic("addUserIdentities", identitiesJwt);
+        }
     }
     public class HelpshiftAndroidLog
     {
